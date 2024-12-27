@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marathi Dictionary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Marathi Dictionary</h1>
+    <input type="text" id="searchInput" placeholder="Search Marathi word" />
+    <button onclick="searchWord()">Search</button>
+    <div id="result"></div>
+
+    <script>
+        let dictionary = {};
+
+        // Load the JSON file
+        fetch("marathi_dictionary_proper.json")
+            .then(response => response.json())
+            .then(data => {
+                dictionary = data;
+                console.log("Dictionary loaded:", dictionary);
+            })
+            .catch(error => {
+                console.error("Error loading dictionary:", error);
+            });
+
+        function searchWord() {
+            const searchInput = document.getElementById("searchInput").value.trim();
+            const resultDiv = document.getElementById("result");
+
+            if (dictionary[searchInput]) {
+                const wordData = dictionary[searchInput];
+                resultDiv.innerHTML = `
+                    <h3>Word: ${searchInput}</h3>
+                    <p><strong>Definition:</strong> ${wordData.definition}</p>
+                    <p><strong>Example:</strong> ${wordData.example}</p>
+                    <p><strong>Synonyms:</strong> ${wordData.synonyms.join(", ")}</p>
+                `;
+            } else {
+                resultDiv.innerHTML = "<p>Word not found in the dictionary.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
